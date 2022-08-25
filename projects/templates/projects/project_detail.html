@@ -45,6 +45,7 @@
           <div class="comments">
             <h3 class="singleProject__subtitle">Feedback</h3>
             <h5 class="project--rating">
+              <p>
               {% if project.vote_ratio  %}{{project.vote_ratio}}{% else %}0{% endif %}%</span> Postitive
               Feedback ({% if project.vote_total %}{{project.vote_total}}{% else %}0{% endif %} Vote{{project.vote_total|pluralize}})
             </p>

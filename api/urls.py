@@ -4,6 +4,6 @@ from api.views import getProjects, getProject
 
 
 urlpatterns = [
-    path('', getProjects),
+    path('projects/', getProjects),
     path('projects/<str:pk>/', getProject)
 ]

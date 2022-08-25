@@ -1,0 +1,4 @@
+djangorestframework==3.13.1
+django==4.0
+pillow==9.0.1
+django-auto-prefetch==1.1.0
