@@ -5,14 +5,14 @@ import logging
 # THIRD PARTY APPS
 INSTALLED_APPS += [
     'debug_toolbar',
-    'nplusone.ext.django'
+    # 'nplusone.ext'
 
 ]
 
 # THIRD PARTY MIDDLEWAR
 MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'nplusone.ext.django.NPlusOneMiddleware'
+    # 'nplusone.ext.django.NPlusOneMiddleware'
 ] 
 
 STATIC_URL = '/static/'
