@@ -1,0 +1,57 @@
+{% if page_obj.has_other_pages %}
+<div class="pagination">
+    <ul class="container">
+      {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}&q={{request.GET.q}}" class="btn">&#10094; Prev</a></li>
+      {% else %}
+      <li><a href="#" class="btn btn--disabled">&#10094; Prev</a></li>
+      {% endif %}
+      {% for i in custom_range %}
+        {% if page_obj.number == i %}
+          <li><a href="?page={{i}}&q={{request.GET.q}}" class="btn btn--sub">{{i}}</a></li>
+        {% else %}
+          <li><a href="?page={{i}}&q={{request.GET.q}}" class="btn">{{i}}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}&q={{request.GET.q}}" class="btn">Next &#10095;</a></li>
+      {% else %}
+      <li><a href="#" class="btn btn--disabled">Next &#10095;</a></li>
+      {% endif %}
+    </ul>
+  </div>
+{% endif %}
+
+
+{% comment %} 
+  <nav aria-label="Page navigation example">
+    {% if object_list.has_other_pages %}
+    <ul class="pagination pagination-template d-flex justify-content-center">
+      {% if object_list.has_previous %}
+        <li class="page-item">
+          <a href="?{{request_var}}={{ object_list.previous_page_number }}&q={{request.GET.q}}" class="page-link"><i class="fa fa-angle-left"></i></a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a href="#" class="page-link"> <i class="fa fa-angle-left"></i></a>
+        </li>
+      {% endif %}
+          {% for i in object_list.paginator.page_range %}
+            {% if object_list.number == i %}
+              <li class="page-item"><a href="{{i}}&q={{request.GET.q}}" class="page-link active">{{i}}</a></li>
+            {% else %}
+              <li class="page-item"><a href="?page={{i}}&q={{request.GET.q}}" class="page-link">{{i}}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% if object_list.has_next %}
+          <li class="page-item">
+            <a href="?page={{ object_list.next_page_number }}&q={{request.GET.q}}" class="page-link"><i class="fa fa-angle-right"></i></a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a href="#" class="page-link"><i class="fa fa-angle-right"></i></a>
+          </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+  </nav> {% endcomment %}

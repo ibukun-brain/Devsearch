@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+{% include 'partials/_messages.html' %}
+<main class="home">
+    <section class="hero-section text-center">
+      <div class="container container--narrow">
+        <div class="hero-section__box">
+          <h2>CONNECT WITH <span>DEVELOPERS</span></h2>
+          <h2>FROM AROUND THE WORLD</h2>
+        </div>
+
+        <div class="hero-section__search">
+          <form class="form" action="" method="get">
+            <div class="form__field">
+              <label for="formInput#search">Search Developers </label>
+              <input class="input input--text" id="formInput#search" type="text" name="q"
+                placeholder="Search by developer name" value="{{request.GET.q}}"/>
+            </div>
+
+            <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- Search Result: DevList -->
+    <section class="devlist">
+      <div class="container">
+        <div class="grid grid--three">
+        {% for profile in profiles %}
+          <div class="column card">
+            <div class="dev">
+              <a href="{% url 'accounts:profile_detail' profile.user profile.pk  %}" class="card__body">
+                <div class="dev__profile">
+                  <img class="avatar avatar--md" src="{{profile.profile_image.url}}" alt="image" />
+                  <div class="dev__meta">
+                    <h3>{{profile.name|title}}</h3>
+                    <h5>{{profile.short_intro|truncatechars:60}}</h5>
+                  </div>
+                </div>
+                <p class="dev__info">
+                  {{profile.bio|truncatechars:150}}
+                </p>
+                <div class="dev__skills">
+                  
+                {% for skill in profile.profile_skills.all|slice:"5" %}
+                  <span class="tag tag--pill tag--main">
+                    <small>{{skill.name}}</small>
+                  </span>
+                {% endfor %}
+                </div>
+              </a>
+            </div>
+          </div>
+        {% empty %}
+          <div style="margin:0 auto">
+              <div><img src="{% static 'images/no-result1.png' %}" alt=""></div>
+              <span style="text-align:center"><h3>Oops! no result found.</h3></span>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    {% include 'partials/_pagination.html' %}
+{% endblock content %}

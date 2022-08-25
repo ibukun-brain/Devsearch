@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Delete {{skill.name}}{% endblock title %}
+
+{% block content %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <main class="formPage my-xl">
+        <div class="content-box">
+            <div class="formWrapper">
+                <a class="backButton" href="{{request.META.HTTP_REFERER}}"><i class="im im-angle-left"></i></a>
+                <br>
+
+                <form class="form" method="POST">
+                    <p>Are you sure you want to delete <strong>"{{skill.name}}"?</strong></p>
+                    <a class="btn btn--sub btn--lg  my-md" href="{{request.META.HTTP_REFERER}}">&#x2190 Go Back</a>
+                    <input class="btn btn--sub btn--lg  my-md" type="submit" value="Delete" />
+                </form>
+            </div>
+        </div>
+    </main>
+</form>
+{% endblock content %}

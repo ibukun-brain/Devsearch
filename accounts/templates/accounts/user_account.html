@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}Account settings{% endblock title %}
+{% block content %}
+
+<main class="settingsPage profile my-md">
+   <div style="text-align: center;">{% include 'partials/_messages.html' %}</div>
+    <div class="container">
+      <div class="layout">
+        <div class="column column--1of3">
+          <div class="card text-center">
+            <div class="card__body dev">
+              {% if request.user == profile.user %}
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'accounts:edit_account' %}"><i class="im im-edit"></i> Edit</a>
+              {% endif %}
+              <img class="avatar avatar--xl dev__avatar" src="{{profile.profile_image.url}}" />
+              <h2 class="dev__name">{{profile.name}}</h2>
+              <p class="dev__title">{{profile.short_intro}}</p>
+              <p class="dev__location">Based in {{profile.location}}</p>
+              <ul class="dev__social">
+                {% if profile.social_github %}
+                <li>
+                  <a title="Github" href="{{profile.social_github}}" target="_blank"><i class="im im-github"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_twitter %}
+                <li>
+                  <a title="Twitter" href="{{profile.social_twitter}}" target="_blank"><i class="im im-twitter"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_linkedin %}
+                <li>
+                  <a title="LinkedIn" href="{{profile.social_github}}" target="_blank"><i class="im im-linkedin"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_youtube %}
+                <li>
+                  <a title="Youtube" href="{{profile.social_youtube}}" target="_blank"><i class="im im-youtube"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.portfolio %}
+                <li>
+                  <a title="Portfolio" href="{{profile.portfolio}}" target="_blank"><i class="im im-globe"></i></a>
+                </li>
+                {% endif %}
+              </ul>
+              {% comment %} <a href="{% url 'accounts:message_create' profile.pk %}" class="btn btn--sub btn--lg">Send Message </a> {% endcomment %}
+            </div>
+          </div>
+        </div>
+        <div class="column column--2of3">
+          <div class="devInfo">
+            <h3 class="devInfo__title">About Me</h3>
+            <p class="devInfo__about">
+              {{profile.bio}}
+            </p>
+          </div>
+          <div class="settings">
+            <h3 class="settings__title">Skills</h3>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'accounts:add_skill' %}"><i class="im im-plus"></i> Add Skill</a>
+          </div>
+
+          <table class="settings__table">
+            {% for skill in skills %}
+            <tr>
+              <td class="settings__tableInfo">
+                <h4>{{skill.name}}</h4>
+                <p>
+                 {{skill.description}}
+                </p>
+              </td>
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'accounts:update_skill' skill.pk %}"><i class="im im-edit"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'accounts:delete_skill' skill.pk%}"><i class="im im-x-mark-circle-o"></i>
+                  Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+
+          <div class="settings">
+            <h3 class="settings__title">Projects</h3>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'projects:project_create' %}"><i class="im im-plus"></i> Add Project</a>
+          </div>
+
+          <table class="settings__table">
+            {% for project in profile.project_set.all %}
+            <tr>
+              <td class="settings__thumbnail">
+                <a href="single-project.html"><img src="{% if project.featured_image %}{{project.featured_image.url}}{% endif %}" alt="Project Thumbnail" /></a>
+              </td>
+              <td class="settings__tableInfo">
+                <a href="{% url 'projects:project_detail' project.owner.name project.slug %}">{{project.title}}</a>
+                <p>
+                  {{project.description|truncatechars:150}}
+                </p>
+              </td>
+              {% if request.user == project.owner.user %}
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'projects:project_update' project.pk %}"><i class="im im-edit"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'projects:project_delete' project.pk %}"><i class="im im-x-mark-circle-o"></i>
+                  Delete</a>
+              </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+{% endblock content %}

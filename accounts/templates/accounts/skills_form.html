@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{page_title}}{% endblock title %}
+
+{% block content %}
+<main class="formPage my-xl">
+    <div class="content-box">
+        <div class="formWrapper">
+            <a class="backButton" href="{{request.META.HTTP_REFERER}}"><i class="im im-angle-left"></i></a>
+            <br>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form__field">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <label for="formInput#text">{{field.label}}</label>
+                    {{field}}
+                    {% endfor %}
+                </div>
+
+                <!-- Input:Text -->
+               
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+</main>
+
+</form>
+{% endblock content %}

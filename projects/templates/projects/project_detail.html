@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+<link rel="stylesheet" href="{% static 'styles/ratings.css' %}">
+{% endblock stylesheets %}
+{% block title %}{{project.title}}{% endblock title %}
+
+
+{% block content %}
+
+<!-- Main Section -->
+<main class="singleProject my-md">
+  <div style="text-align:center">{% include 'partials/_messages.html' %}</div>   
+    <div class="container">
+      <div class="layout">
+        <div class="column column--1of3">
+          <h3 class="singleProject__subtitle">Tools & Stacks</h3>
+          <div class="singleProject__toolStack">
+            {% for tag in project.tags.all %}
+            <span class="tag tag--pill tag--sub tag--lg">
+              <small>{{tag}}</small>
+            </span>
+            {% endfor %}
+          </div>
+          
+          {% if project.source_link %}
+            <a class="singleProject__liveLink" href="{{project.source_link}}" target="_blank"><i class="im im-external-link"></i>Source Code &nbsp;
+            </a>
+          {% endif %}
+          {% if project.demo_link %}
+          <a class="singleProject__liveLink" href="{{project.demo_link}}" target="_blank"><i class="im im-external-link"></i>Live Demo</a>
+        {% endif %}
+          
+        </div>
+        <div class="column column--2of3">
+          <img class="singleProject__preview" src="{% if project.featured_image %}{{project.featured_image.url}}{% endif %}" alt="portfolio thumbnail" />
+          <a href="{% url 'accounts:profile_detail' project.owner.user project.owner.pk %}" class="singleProject__developer">{{project.owner.name}}</a>
+          <h2 class="singleProject__title">{{project.title}}</h2>
+          <h3 class="singleProject__subtitle">About the Project</h3>
+          <div class="singleProject__info">
+            {{project.description}}
+          </div>
+
+          <div class="comments">
+            <h3 class="singleProject__subtitle">Feedback</h3>
+            <h5 class="project--rating">
+              {% if project.vote_ratio  %}{{project.vote_ratio}}{% else %}0{% endif %}%</span> Postitive
+              Feedback ({% if project.vote_total %}{{project.vote_total}}{% else %}0{% endif %} Vote{{project.vote_total|pluralize}})
+            </p>
+            </h5>
+            {% if request.user.profile.pk in reviews %}
+                <div class="alert alert--error">
+                  <p class="alert__message">You have already submitted your review for this project</p>
+                  <button class="alert__close">⨯</button>
+                </div>
+                {% elif request.user.profile == project.owner %}
+                  <div class="alert alert--error">
+                    <p class="alert__message">You can't review your own project</p>
+                    <button class="alert__close">⨯</button>
+                  </div>
+                {% elif request.user.is_authenticated %}
+                  <form class="form" action="" method="POST">
+                    {% csrf_token %}
+                    {% include 'partials/_ratings.html' %}
+
+                    <div class="form__field">
+                      {% for field in form %}
+                      <label for="formInput#textarea">{{field.label}}</label>
+                      {{field}}
+                      {% endfor %}
+                    </div>
+                    <input class="btn btn--sub btn--lg" type="submit" value="Add Review" />
+                  </form>
+                  {% else %}
+                  <div class="alert alert--error">
+                    <p class="alert__message">Please <a href="{% url 'accounts:login' %}?next={{request.path}}">login</a> to leave a review</p>
+                  </div>
+            {% endif %}
+            <div class="commentList">
+              {% for review in project.project_reviews.all  %}
+                {% if review.body %}
+              <div class="comment">
+                <a href="{% url 'accounts:profile_detail' review.owner.user review.owner.pk %}">
+                  <img class="avatar avatar--md"
+                    src="{{review.owner.profile_image.url}}" alt="user" />
+                </a>
+                <div class="comment__details">
+                  <a href="{% url 'accounts:profile_detail' review.owner.user review.owner.pk %}" class="comment__author">{{review.owner.name}}</a>
+                  <p class="comment__info">{{review.body|linebreaksbr}}</p>
+                </div>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+{% endblock content %}
